@@ -65,6 +65,19 @@ class CompositeSteelBeam(Beam):
 
         return (beff_left + beff_right)
     
+    #TODO: finish this function. Need to review textbook to calculate correctly.
+    def calc_compressive_force(self) -> float:
+        steel_force = self.steel_material.fy * self.shape.area
+        concrete_force = 0.85 * self.concrete_material.fc
+
+        print(f'{steel_force=}')
+        print(f'{concrete_force=}')
+        # compression = min(
+        #     self.steel_material.fy * self.shape.area
+        # )
+        pass
+
+    
 
 
 

@@ -135,6 +135,8 @@ def calc_beam(data: dict) -> dict:
     Calculates beam capacity and returns dictionary of outputs to be added to Streamlit App
     '''
     comp_beam = generate_comp_beam(data)
+
+    comp_beam.calc_compressive_force()
     
     return comp_beam
     
