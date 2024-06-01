@@ -43,7 +43,7 @@ class CompositeSteelBeam(Beam):
     def __post_init__(self): # calculated parameters after dataclass initialization
         pass
 
-    def get_effective_width(self) -> float:
+    def calc_effective_width(self) -> float:
         '''
         Returns the effective width of the beam in feet
         '''
@@ -64,6 +64,7 @@ class CompositeSteelBeam(Beam):
         )
 
         return (beff_left + beff_right)
+    
 
 
 

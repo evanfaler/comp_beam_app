@@ -1,5 +1,5 @@
 import streamlit as st
-import comp_beam
+import app_logic
 from steelpy import aisc
 
 w_shapes_list = list(aisc.W_shapes.sections.keys())[::-1]
@@ -46,7 +46,7 @@ with st.sidebar.expander(label='Uniform Loads', expanded=True):
 
 st.write(st.session_state)
 
-calc_data = comp_beam.calc_beam(st.session_state)
+calc_data = app_logic.calc_beam(st.session_state)
 
 st.write(calc_data)
 
