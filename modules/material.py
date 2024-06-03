@@ -41,7 +41,7 @@ class Concrete(Material):
         lw_mod_factor (float) Optional = 1.0: lightweight modification factor per ACI.
 
     Calculated Values:
-        Ec: float: Modulus of elasticity of concrete, calculated per ACI 318-19 eq. 19.2.2.1(a)
+        Ec: float: Modulus of elasticity of concrete (ksi), calculated per ACI 318-19 eq. 19.2.2.1(a)
     '''
     fc: float = 4.0
     fy: int = 60
@@ -49,5 +49,5 @@ class Concrete(Material):
     lw_mod_factor: float = 1.0
     
     def __post_init__(self): # calculated parameters after dataclass initialization
-        self.Ec = (self.density**1.5)*sqrt(self.fc)
+        self.Ec = (self.density**1.5)*33*sqrt(self.fc*1000) / 1000
     
