@@ -110,7 +110,7 @@ def generate_comp_beam(data: dict) -> CompositeSteelBeam:
     conc_material = Concrete(
         name='Concrete',
         poisson_ratio=0.2,
-        density=150,
+        density=145,
         fc=data['fc'],
         lw_mod_factor = 0.75 if data['lightweight'] else 1.0
     )
@@ -135,7 +135,16 @@ def calc_beam(data: dict) -> dict:
     Calculates beam capacity and returns dictionary of outputs to be added to Streamlit App
     '''
     comp_beam = generate_comp_beam(data)
-        
+
+    # PNA = comp_beam.calc_PNA()
+    # C = comp_beam.calc_full_comp_C()
+    # a_full_comp = comp_beam.calc_stress_block_depth(C)
+    # print(f'{C=}')     
+    # print(f'{a_full_comp=}')
+
+    full_comp_phi_Mn = comp_beam.calc_full_comp_moment_capacity()
+    print(f'{full_comp_phi_Mn=}')
+
     return comp_beam
     
 

@@ -49,5 +49,5 @@ class Concrete(Material):
     lw_mod_factor: float = 1.0
     
     def __post_init__(self): # calculated parameters after dataclass initialization
-        self.Ec = (self.density**1.5)*33*sqrt(self.fc*1000) / 1000
+        self.Ec = (self.density**1.5)*sqrt(self.fc)
     
