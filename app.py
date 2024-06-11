@@ -44,8 +44,7 @@ with st.sidebar.expander(label='Uniform Loads', expanded=True):
     uniform_partition_live = st.number_input(label='Partion Live Load (kip/ft)', format=format_str, key='uniform_partition_live', value=0.000)
     uniform_const_live = st.number_input(label='Construction Live Load (kip/ft)', format=format_str, key='uniform_const_live', value=0.200)
 
-st.write(st.session_state)
+# st.write(st.session_state)
 
 calc_data = app_logic.calc_beam(st.session_state)
-
 st.write(calc_data)

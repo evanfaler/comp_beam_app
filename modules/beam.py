@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from modules.material import Material, Steel
 from steelpy.steelpy import Section
+from math import sqrt
 
 @dataclass
 class Beam:
@@ -70,6 +71,32 @@ class CompositeSteelBeam(Beam):
         Returns the modular ratio, n, of the composite beam
         '''
         return self.steel_material.E / self.concrete_material.Ec
+    
+    #TODO: finish PNA method
+    def calc_PNA(self) -> float:
+        '''
+        Returns the location of the plastic nuetral axis, measured from top of the slab
+        '''
+        if self.deck.orientation == 0:
+            # Deck oriented parallel to beam
+            #TODO: add logic for this case.
+            pass
+        elif self.deck.orientation == 90:
+            # Deck oriented perpendicular to beam. Concrete in ribs, that is below the top of the deck, is neglected in determining section properties.
+            
+            pass
+
+
+    def is_web_compact(self) -> bool:
+        '''
+        Returns whether steel shape web is compact or not.
+        '''
+        h_tw = self.shape.T / self.shape.tw
+        if h_tw <= 3.76 * sqrt(self.steel_material.E / self.steel_material.fy): # section is compact
+            return True
+        else:
+            return False
+
     
     
     
