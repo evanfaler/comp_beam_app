@@ -87,7 +87,9 @@ def generate_comp_beam(data: dict) -> CompositeSteelBeam:
     studs = {
         'fu': data['stud_fu'],
         'dia': str_fraction_to_float(data['stud_dia']),
-        'length': data['stud_length']
+        'length': data['stud_length'],
+        'max_comp': data['max_comp'] / 100,
+        'min_comp': data['min_comp'] / 100
         }
     
     deck = {

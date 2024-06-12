@@ -26,6 +26,8 @@ with st.sidebar.expander(label='Stud Information', expanded=True):
     stud_fu = st.number_input(label='Fu (ksi)', value=65, step=5, key='stud_fu')
     stud_dia = st.selectbox(label='Diameter', options=['3/4"', '5/8"', '1/2"'], key='stud_dia')
     stud_length = st.number_input(label='Length (in)', value=5.0, step=0.5, key='stud_length')
+    min_comp = st.number_input(label='Min % Composite', value=25, step=5, key='min_comp')
+    max_comp = st.number_input(label='Max % Composite', value=100, step=5, key='max_comp')
 
 # Deck and Fill
 with st.sidebar.expander(label='Deck and Fill', expanded=True):
