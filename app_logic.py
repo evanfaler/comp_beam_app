@@ -2,6 +2,7 @@ from modules.beam import CompositeSteelBeam
 from modules.load import UniformLoad
 from steelpy import aisc
 from modules.material import Steel, Concrete
+import modules.load_factors as load_factors
 
 def generate_loads(data: dict) -> list:
     '''
@@ -40,13 +41,13 @@ def generate_loads(data: dict) -> list:
         end_loc = data['beam_length'],
     ))
 
-    loads.append(UniformLoad(
-        name = 'Uniform Partition Live Load',
-        load_case = 'Lp',
-        magnitude = data['uniform_partition_live'],
-        start_loc = 0,
-        end_loc = data['beam_length'],
-    ))
+    # loads.append(UniformLoad(
+    #     name = 'Uniform Partition Live Load',
+    #     load_case = 'Lp',
+    #     magnitude = data['uniform_partition_live'],
+    #     start_loc = 0,
+    #     end_loc = data['beam_length'],
+    # ))
 
     loads.append(UniformLoad(
         name = 'Uniform Construction Live Load',
@@ -145,7 +146,7 @@ def calc_beam(data: dict) -> dict:
     # print(f'{a_full_comp=}')
 
     full_comp_phi_Mn = comp_beam.calc_full_comp_moment_capacity()
-    print(f'{full_comp_phi_Mn=}')
+    print(f'{full_comp_phi_Mn=}')    
 
     return comp_beam
     

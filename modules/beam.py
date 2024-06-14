@@ -1,7 +1,9 @@
 from dataclasses import dataclass
 from modules.material import Material, Steel
 from steelpy.steelpy import Section
+import modules.load_factors as load_factors
 from math import sqrt
+import copy
 
 @dataclass
 class Beam:
@@ -42,7 +44,13 @@ class CompositeSteelBeam(Beam):
     loads: list
 
     def __post_init__(self): # calculated parameters after dataclass initialization
-        pass
+        # Calculate and store factored load dictionaries
+        self.factored_loads = {
+            'pre_comp_factored': self.generate_factored_loads(load_factors.ASCE_7_PRE_COMP_FACTORED_LOADS),
+            'pre_comp_service': self.generate_factored_loads(load_factors.ASCE_7_PRE_COMP_SERVICE_LOADS),
+            'comp_factored': self.generate_factored_loads(load_factors.ASCE_7_LRFD_COMBOS),
+            'comp_service': self.generate_factored_loads(load_factors.ASCE_7_SERVICE_COMBOS)
+        }
 
     def calc_effective_width(self) -> float:
         '''
@@ -100,10 +108,7 @@ class CompositeSteelBeam(Beam):
             print(f'{steel_area=}')
             print(f'{steel_y=}')
             print(f'{y_bar=}')
-
             
-            pass
-
     def calc_full_comp_moment_capacity(self) -> float:
         '''
         Returns the full composite moment capacity of the composite beam in kip-ft.
@@ -160,13 +165,26 @@ class CompositeSteelBeam(Beam):
         else:
             return False
 
-    
-    
-    
+    def generate_factored_loads(self, load_combos: dict) -> float:
+        '''
+        Returns a factored load dict based on the selected load_combination. Refer to load_factors.py for load_combination choices.
+        
+        Parameters:
+            load_combinations (dict): dictionary of load combinations to use for factoring. Must match one of the combinations in load_factors.py.
 
+        Returns:
+            (dict): modified load dictionary with load intensities modified to be the resultant of the maximum load case.
+        '''
+        
+        # Uniformly distributed loads
+        load_dict = {}
+        for load in self.loads:
+            load_dict[f'{load.load_case}_load'] = load.magnitude
+        
+        factored_UDL = load_factors.max_factored_load(load_dict, load_combos=load_combos)
 
-    
+        factored_loads = {
+            'UDL': factored_UDL
+        }
 
-
-
-
+        return factored_loads
