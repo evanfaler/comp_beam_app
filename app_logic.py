@@ -145,8 +145,10 @@ def calc_beam(data: dict) -> dict:
     # print(f'{C=}')     
     # print(f'{a_full_comp=}')
 
-    full_comp_phi_Mn = comp_beam.calc_full_comp_moment_capacity()
-    print(f'{full_comp_phi_Mn=}')    
+    # full_comp_phi_Mn = comp_beam.calc_full_comp_moment_capacity()
+    # print(f'{full_comp_phi_Mn=}')
+
+    print(f'factored loads: {comp_beam.factored_loads}')
 
     return comp_beam
     

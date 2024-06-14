@@ -40,9 +40,9 @@ with st.sidebar.expander(label='Deck and Fill', expanded=True):
 # Uniform Loading
 with st.sidebar.expander(label='Uniform Loads', expanded=True):
     format_str = '%.3f'
-    uniform_dead = st.number_input(label='Dead Load (kip/ft)', format=format_str, key='uniform_dead', value=0.584) # Total DL on beam
-    uniform_const_dead = st.number_input(label='Construction Dead Load (kip/ft)', format=format_str, key='uniform_const_dead', value=0.504) #amount of DL present during construction
-    uniform_live = st.number_input(label='Live Load (kip/ft)', format=format_str, key='uniform_live', value=0.800) 
+    uniform_dead = st.number_input(label='Dead Load (kip/ft)', format=format_str, key='uniform_dead', value=0.500) # Total DL on beam
+    uniform_const_dead = st.number_input(label='Construction Dead Load (kip/ft)', format=format_str, key='uniform_const_dead', value=0.500) #amount of DL present during construction
+    uniform_live = st.number_input(label='Live Load (kip/ft)', format=format_str, key='uniform_live', value=1.300) 
     uniform_const_live = st.number_input(label='Construction Live Load (kip/ft)', format=format_str, key='uniform_const_live', value=0.200) #amount of LL present during construction
 
 # st.write(st.session_state)

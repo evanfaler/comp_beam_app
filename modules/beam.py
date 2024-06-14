@@ -179,12 +179,32 @@ class CompositeSteelBeam(Beam):
         # Uniformly distributed loads
         load_dict = {}
         for load in self.loads:
-            load_dict[f'{load.load_case}_load'] = load.magnitude
+            if load.load_case == 'D' or load.load_case == 'CD': # add beam self weight to DL case.
+                load_dict[f'{load.load_case}_load'] = load.magnitude + self.shape.weight / 1000
+            else:
+                load_dict[f'{load.load_case}_load'] = load.magnitude
         
         factored_UDL = load_factors.max_factored_load(load_dict, load_combos=load_combos)
 
+        # Combine into one load dict
         factored_loads = {
             'UDL': factored_UDL
         }
 
         return factored_loads
+    
+    def generate_analysis_model(self):
+        '''
+        Generates and returns a Pynite FEA model ready for analysis
+        '''
+
+        pass
+
+
+    def analyse(self):
+        '''
+        Analyzes the composite beam and saves forces, reactions, deflections etc.
+        '''
+
+
+        pass
