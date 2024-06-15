@@ -149,7 +149,7 @@ def calc_beam(data: dict) -> dict:
     # print(f'{full_comp_phi_Mn=}')
 
     #TODO: Consider adding button to run the analysis so that PyniteFEA doesn't have to run at each 
-    comp_beam.generate_analysis_model()
+    # comp_beam.generate_analysis_model()
 
     # load_combo = 'comp_factored'
     # Mu = comp_beam.fea_beam.Members[comp_beam.name].max_moment('Mz', combo_name=load_combo)
