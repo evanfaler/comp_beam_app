@@ -82,6 +82,21 @@ class CompositeSteelBeam(Beam):
         '''
         return self.steel_material.E / self.concrete_material.Ec
     
+    def calc_req_steel_area(self) -> float:
+        '''
+        Calculates the required steel area needed (in^2) for the beam section, assuming that PNA is in the slab. Used for initial sizing of beam before iterative calculations are completed.
+        '''
+        Mu = self.fea_beam.Members[self.name].max_moment('Mz', combo_name='comp_factored') * 12 #convert to kip*inches
+        phi = 0.9
+        Fy = self.steel_material.fy
+        d = self.shape.d
+        ts = self.deck['t_s']
+        a = 1 # Assumed 1in deep for preliminary design. See Salmon & Johnson chapter 16.10.
+
+        A_s = Mu / (phi * Fy * ((d/2) + ts - a/2))
+
+        return A_s
+
     #TODO: finish PNA method
     def calc_PNA(self) -> float:
         '''
@@ -195,7 +210,7 @@ class CompositeSteelBeam(Beam):
 
         return factored_loads
     
-    def generate_analysis_model(self):
+    def analyze(self):
         '''
         Generates, analyzes and returns a Pynite FEA model from the properties of the object.
         '''

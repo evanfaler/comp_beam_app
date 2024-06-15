@@ -138,6 +138,8 @@ def calc_beam(data: dict) -> dict:
     Calculates beam capacity and returns dictionary of outputs to be added to Streamlit App
     '''
     comp_beam = generate_comp_beam(data)
+    comp_beam.analyze()
+    print(f'Required Steel Area: {comp_beam.calc_req_steel_area()} in2')
 
     # PNA = comp_beam.calc_PNA()
     # C = comp_beam.calc_full_comp_C()
