@@ -4,6 +4,7 @@ from steelpy.steelpy import Section
 import modules.load_factors as load_factors
 from math import sqrt
 import copy
+from PyNite import FEModel3D
 
 @dataclass
 class Beam:
@@ -42,6 +43,7 @@ class CompositeSteelBeam(Beam):
     steel_material: Material
     concrete_material: Material
     loads: list
+    fea_beam: FEModel3D = None
 
     def __post_init__(self): # calculated parameters after dataclass initialization
         # Calculate and store factored load dictionaries
@@ -195,16 +197,44 @@ class CompositeSteelBeam(Beam):
     
     def generate_analysis_model(self):
         '''
-        Generates and returns a Pynite FEA model ready for analysis
+        Generates, analyzes and returns a Pynite FEA model from the properties of the object.
         '''
+        # Create a new finite element model
+        beam = FEModel3D()
 
-        pass
+        # Add nodes (14 ft = 168 inches apart)
+        beam.add_node('N1', 0, 0, 0)
+        beam.add_node('N2', self.span, 0, 0)
 
+        # Define a material
+        E = self.steel_material.E               # Modulus of elasticity (ksi)
+        G = self.steel_material.G               # Shear modulus of elasticity (ksi)
+        nu = self.steel_material.poisson_ratio  # Poisson's ratio
+        rho = self.steel_material.density / (1000 * 12**3)  # Density (kci)
+        beam.add_material('Steel', E, G, nu, rho)
 
-    def analyse(self):
-        '''
-        Analyzes the composite beam and saves forces, reactions, deflections etc.
-        '''
+        # Add beam with appropriate properties
+        beam.add_member(name=self.name, i_node='N1', j_node='N2', material_name='Steel', Iy=self.shape.Iy, Iz=self.shape.Ix, J=self.shape.J, A=self.shape.area)
 
+        # Provide simple supports
+        beam.def_support('N1', True, True, True, False, False, False)
+        beam.def_support('N2', True, True, True, True, False, False)
 
-        pass
+        # Add uniform loads
+        for case_name in self.factored_loads:
+            # Add each type of load to analysis member
+            # UDLs      
+            udl_magnitude = self.factored_loads[case_name]['UDL']
+            udl_start = 0
+            udl_stop = self.span
+            beam.add_member_dist_load(member_name=self.name, Direction='Fy', w1=udl_magnitude, w2=udl_magnitude, x1=udl_start, x2=udl_stop, case=case_name)
+            
+            # Add load combos that are just a 1.0 factor for each load case, named the same as the load case.
+            beam.add_load_combo(name=case_name, factors={f'{case_name}': 1.0})
+        
+
+        # Run analysis on beam.
+        beam.analyze_linear()
+
+        # Assign to fea_analysis property. Results may be queried from other methods using self.fea_beam now.
+        self.fea_beam = beam

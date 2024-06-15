@@ -148,7 +148,12 @@ def calc_beam(data: dict) -> dict:
     # full_comp_phi_Mn = comp_beam.calc_full_comp_moment_capacity()
     # print(f'{full_comp_phi_Mn=}')
 
-    print(f'factored loads: {comp_beam.factored_loads}')
+    #TODO: Consider adding button to run the analysis so that PyniteFEA doesn't have to run at each 
+    comp_beam.generate_analysis_model()
+
+    # load_combo = 'comp_factored'
+    # Mu = comp_beam.fea_beam.Members[comp_beam.name].max_moment('Mz', combo_name=load_combo)
+    # print(f'Max Bending Moment for {load_combo} = {Mu}')
 
     return comp_beam
     

@@ -22,10 +22,12 @@ class Steel(Material):
 
     Parameters:
         E: (int) Optional = 29000: Modulus of elasticity of steel, ksi
+        G: (int) Optional = 11200: Shear Modulus of elasticity of steel, ksi
         fy: (int) Optional = 50: Minimum yield stress of steel, ksi
         fu: (int) Optional = 65: Tensile stress, ksi
     '''
     E: int = 29000
+    G: int = 11200
     fy: int = 50
     fu: int = 65
 
