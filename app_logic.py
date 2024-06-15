@@ -139,7 +139,9 @@ def calc_beam(data: dict) -> dict:
     '''
     comp_beam = generate_comp_beam(data)
     comp_beam.analyze()
-    print(f'Required Steel Area: {comp_beam.calc_req_steel_area()} in2')
+    print(f'Flange is compact: {comp_beam.flange_is_compact()}')
+    
+    
 
     # PNA = comp_beam.calc_PNA()
     # C = comp_beam.calc_full_comp_C()

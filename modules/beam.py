@@ -96,6 +96,21 @@ class CompositeSteelBeam(Beam):
         A_s = Mu / (phi * Fy * ((d/2) + ts - a/2))
 
         return A_s
+    
+    def calc_pre_comp_strength(self) -> float:
+        '''
+        Calculates and returns the pre-composite strength of the beam.
+        '''
+        if self.deck['orientation'] == 0:
+            # Deck oriented parallel to beam. Beam is only braced at perpendicular framing members.
+            #TODO: add logic for this case.
+            pass
+        elif self.deck['orientation'] == 90:
+            #Deck oriented perpendicular to beam, top flange is braced continuously
+
+            pass
+
+    
 
     #TODO: finish PNA method
     def calc_PNA(self) -> float:
@@ -172,14 +187,24 @@ class CompositeSteelBeam(Beam):
 
         return force / (0.85 * self.concrete_material.fc * b)
 
-    def is_web_compact(self) -> bool:
+    def web_is_compact(self) -> bool:
         '''
         Returns whether steel shape web is compact or not.
         '''
         h_tw = self.shape.T / self.shape.tw
-        if h_tw <= 3.76 * sqrt(self.steel_material.E / self.steel_material.fy): # section is compact
+        if h_tw <= 3.76 * sqrt(self.steel_material.E / self.steel_material.fy): # web is compact
             return True
         else:
+            return False
+        
+    def flange_is_compact(self) -> bool:
+        '''
+        Returns whether steel shape flange is compact or not.
+        '''
+        b_t = (self.shape.bf / 2) / self.shape.tf
+        if b_t <= 0.38 * sqrt(self.steel_material.E / self.steel_material.fy): # flange is compact
+            return True
+        else: 
             return False
 
     def generate_factored_loads(self, load_combos: dict) -> float:
