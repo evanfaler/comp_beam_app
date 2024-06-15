@@ -140,6 +140,7 @@ def calc_beam(data: dict) -> dict:
     comp_beam = generate_comp_beam(data)
     comp_beam.analyze()
     print(f'Flange is compact: {comp_beam.flange_is_compact()}')
+    print(f'Pre-composite moment strength: {comp_beam.calc_pre_comp_strength()} kip*ft')
     
     
 

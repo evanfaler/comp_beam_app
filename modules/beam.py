@@ -99,17 +99,46 @@ class CompositeSteelBeam(Beam):
     
     def calc_pre_comp_strength(self) -> float:
         '''
-        Calculates and returns the pre-composite strength of the beam.
+        Calculates and returns the pre-composite strength of the beam (kip-ft)
         '''
+        phi = 0.9
+        Sx = self.shape.Sx
+        Zx = self.shape.Zx
+        E = self.steel_material.E
+        Fy = self.steel_material.fy
+        λ = self.shape.bf / (2 * self.shape.tf)
         if self.deck['orientation'] == 0:
             # Deck oriented parallel to beam. Beam is only braced at perpendicular framing members.
             #TODO: add logic for this case.
             pass
         elif self.deck['orientation'] == 90:
             #Deck oriented perpendicular to beam, top flange is braced continuously
+            if self.flange_is_compact(): # Use section F2 for capacity calculations
+                #flange is braced, LTB does not apply.
+                #calculate yielding moment
+                print('Flange is compact')
+                phi_Mn = phi * self.steel_material.fy * self.shape.Zx / 12# kip-ft
+            elif self.flange_is_slender():
+                # Use section F3 for capacity calculations
+                print('Flange is slender')
+                h = self.shape.d - (self.shape.tf * 2)
+                k_c = 4 / sqrt(h / self.shape.tw)
+                if k_c <= 0.35:
+                    k_c = 0.35
+                elif k_c >= 0.76:
+                    k_c = 0.76
 
-            pass
+                phi_Mn = phi * ((0.9 * E * k_c * Sx)/(λ**2)) / 12
 
+            else: # Use section F3 for capacity calculations
+                print('Flange is non-compact')
+                λ_pf = 0.38*sqrt(E/Fy)
+                λ_rf = 1.0*sqrt(E/Fy)
+                M_p = Fy*Zx
+            
+                phi_Mn = phi * (M_p - (M_p - 0.7*Fy*Sx) * ((λ - λ_pf)/(λ_rf - λ_pf))) / 12
+    
+        return phi_Mn
     
 
     #TODO: finish PNA method
@@ -203,6 +232,16 @@ class CompositeSteelBeam(Beam):
         '''
         b_t = (self.shape.bf / 2) / self.shape.tf
         if b_t <= 0.38 * sqrt(self.steel_material.E / self.steel_material.fy): # flange is compact
+            return True
+        else: 
+            return False
+
+    def flange_is_slender(self) -> bool:
+        '''
+        Returns whether steel shape flange is slender
+        '''
+        b_t = (self.shape.bf / 2) / self.shape.tf
+        if b_t > 1.0 * sqrt(self.steel_material.E / self.steel_material.fy): # flange is compact
             return True
         else: 
             return False
