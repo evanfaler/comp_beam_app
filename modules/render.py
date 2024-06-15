@@ -86,7 +86,7 @@ def render_beam_section(beam: CompositeSteelBeam, img_width: float = 500, img_he
     scaled_steel_nodes = list(map(tuple, np_steel_nodes)) #convert nodes back to list of tuples for PIllow
 
     # Draw steel shape on image
-    line_width = round(min(img_height, img_width) * 0.01)
+    line_width = round(min(img_height, img_width) * 0.005)
     draw.polygon(xy=scaled_steel_nodes, outline='red', width=line_width)
     draw.polygon(xy=scaled_conc_nodes, outline='gray', width=line_width, fill='darkgray')
 
