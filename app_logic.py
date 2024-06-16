@@ -139,8 +139,13 @@ def calc_beam(data: dict) -> dict:
     '''
     comp_beam = generate_comp_beam(data)
     comp_beam.analyze()
+    print('--------')
     print(f'Flange is compact: {comp_beam.flange_is_compact()}')
-    print(f'Pre-composite moment strength: {comp_beam.calc_pre_comp_strength()} kip*ft')
+    print(f'Pre-composite moment strength: {comp_beam.calc_pre_comp_strength()} k*ft')
+    print(f'Pre-composite moment demand: {comp_beam.fea_beam.Members[comp_beam.name].max_moment('Mz', 'pre_comp_factored')} k*ft')
+    print(f'Full composite compression force: {comp_beam.calc_full_comp_C()} kips')
+    print(f'Depth of compressive stress block, a: {comp_beam.calc_stress_block_depth(comp_beam.calc_full_comp_C())} in')
+    print(f'Full Composite moment strength: {comp_beam.calc_full_comp_moment_capacity()} k*ft')
     
     
 

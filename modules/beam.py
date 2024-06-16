@@ -165,7 +165,6 @@ class CompositeSteelBeam(Beam):
             
         return phi_Mn
     
-
     #TODO: finish PNA method
     def calc_PNA(self) -> float:
         '''
